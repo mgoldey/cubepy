@@ -26,11 +26,11 @@ def plotdata(data,dim=np.ones(3)):
     mlab.contour3d(x,y,z,data.real,contours=[vmax],transparent=True,color=(.5,0,0))
     mlab.contour3d(x,y,z,data.real,contours=[vmin],transparent=True,color=(0,0,.5))
 
-def plotscalar(data):
+def plotscalar(data,dim=np.ones(3)):
+    npts=np.array(data.shape,dtype=int)
+    x,y,z = np.mgrid[0:dim[0]:np.complex(1j)*npts[0],0:dim[1]:np.complex(1j)*npts[1],0:dim[2]:np.complex(1j)*npts[2]]
     source = mlab.pipeline.scalar_field(data)
-    min = data.min()
-    max = data.max()
-    vol = mlab.pipeline.volume(source)
+    vol = mlab.pipeline.volume(x,y,z,source)
 
 def plotmol(mol):
     atoms=np.array(mol.atomids,dtype=int)
@@ -62,9 +62,9 @@ def viewmol(mol):
 
 def viewvol(mol,data):
     mlab.figure()
-    plotmol(mol,np.array(data.shape))
-    plotbonds(mol,np.array(data.shape))
-    plotscalar(data)
+    plotmol(mol)
+    plotbonds(mol)
+    plotscalar(data,mol.cell.diagonal())
     mlab.colorbar()
     mlab.show()
 
@@ -101,28 +101,30 @@ def iview(mol,data):
                 dmin=(sizes[i]+sizes[j])*1.2
                 if (dist<dmin):
                     self.scene.mlab.plot3d(mx[[i,j]],my[[i,j]],mz[[i,j]] ,tube_radius=fac*0.08, color=tuple(0.5*(np.array(atomic_colors[atoms[i]])+np.array(atomic_colors[atoms[j]]))))
+            #self.scene.scene_editor._vtk_control.SetSize([1500,1500])
 
             vmax=ma*.9
             vmin=mi*.9
-            self.plot=self.scene.mlab.contour3d(x,y,z,data.real,contours=[vmax,vmin],transparent=True,vmin=mi,vmax=ma)
-            #self.plot2=self.scene.mlab.contour3d(x,y,z,data.real,contours=[vmin],transparent=True,color=(0,0,.5))
+            #self.plot=self.scene.mlab.contour3d(x,y,z,data.real,contours=[vmax,vmin],transparent=True,vmin=mi,vmax=ma)
+            self.plot=self.scene.mlab.contour3d(x,y,z,data.real,contours=[vmax],transparent=True,color=(1,0,0),opacity=0.3)
+            self.plot2=self.scene.mlab.contour3d(x,y,z,data.real,contours=[vmin],transparent=True,color=(0,0,1),opacity=0.3)
 
         @on_trait_change('upiso')
         def update_plot1(self):
-            self.plot.contour.contours=[self.upiso,self.downiso]
-            self.scene.mlab.colorbar(orientation='vertical')
+            #self.plot.contour.contours=[self.upiso,self.downiso]
+            self.plot.contour.contours=[self.upiso]
+            #self.scene.mlab.colorbar(orientation='vertical')
         
         @on_trait_change('downiso')
         def update_plot2(self):
-            self.plot.contour.contours=[self.upiso,self.downiso]
-            self.scene.mlab.colorbar(orientation='vertical')
+            #self.plot.contour.contours=[self.upiso,self.downiso]
+            self.plot2.contour.contours=[self.downiso]
+            #self.scene.mlab.colorbar(orientation='vertical')
 
         # the layout of the dialog created
         view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene),
-                        height=500, width=500, show_label=False),
-                    HGroup('_','downiso',),
-                    HGroup('_','upiso',),
-                    #HGroup('_', 'upiso', 'downiso',),
+                        height=1500, width=1500, show_label=False),
+                    HGroup('_','downiso',), HGroup('_','upiso',), resizable=True,
                     )
 
     visualization = Visualization()
