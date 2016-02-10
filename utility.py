@@ -33,12 +33,32 @@ class molecule:
         os.writelines(odata)
         os.close()
     def view(self):
-        view.view(self)
+        view.view_mol(self)
     def fixpbc(self):
         self.coords=np.imag(np.log(np.exp(2*np.pi*np.complex(1j)*self.coords.dot(np.linalg.inv(self.cell))))).dot(self.cell)/(2*np.pi)
         self.__center_of_mass()
     def move(self,vec):
         self.coords=self.coords+vec
+    def copy(self,offset):
+        imol=deepcopy(self)
+        icoords=imol.coords
+        rx=(offset[1]-offset[0])
+        ry=(offset[3]-offset[2])
+        rz=(offset[5]-offset[4])
+        imol.natoms*=rx*ry*rz
+        imol.cell[0]*=rx
+        imol.cell[1]*=ry
+        imol.cell[2]*=rz
+        imol.atomids=np.array(imol.atomids.tolist()*rx*ry*rz)
+        imol.coords=np.array(imol.coords.tolist()*rx*ry*rz).reshape(rx,ry,rz,self.natoms,3)
+
+        for irx,rx in enumerate(range(offset[0],offset[1])):
+            for iry,ry in enumerate(range(offset[2],offset[3])):
+                for irz,rz in enumerate(range(offset[4],offset[5])):
+                    imol.coords[irx,iry,irz]+=rx*self.cell[0]+ry*self.cell[1]+rz*self.cell[2]
+        imol.coords=imol.coords.reshape(imol.natoms,3)
+        return imol
+
     def center(self):
         self.fixpbc()
         self.move(-self.com)
