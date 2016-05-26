@@ -3,6 +3,12 @@ from copy import deepcopy
 import constants
 import view
 
+def get_grid(mol,data):
+    l1,l2,l3=mol.cell.diagonal()
+    n1,n2,n3=mol.cell.diagonal()/data.shape
+    return np.mgrid[0:l1:n1,0:l2:n2,0:l3:n3]
+
+
 class molecule:
     """ Helper molecule class for holding data and organizing dependent functions """
     def __init__(self,atomids,coords,cell=np.identity(3)):

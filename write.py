@@ -1,6 +1,6 @@
 import numpy as np
 from constants import angstrom_to_bohr
-def write(mol,data,file_name):
+def write_cube(mol,data,file_name):
     """ Writes cubefile with mol and data as passed to it """
     outf=open(file_name+".cub",'w')
     outf.writelines("CUBE FILE WRITTEN USING MBG CUBEPY CODE VERSION 0.01\n")
