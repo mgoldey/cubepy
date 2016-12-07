@@ -14,7 +14,7 @@ Read cube files, do numpy manipulations, and visualize them quickly before expor
 Put in $PYTHONPATH
 
 * Dependencies
-matplotlib, mayavi
+matplotlib, [mayavi - defunct on work computer]
 
 ### Contribution guidelines ###
 

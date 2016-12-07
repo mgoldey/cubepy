@@ -3,7 +3,7 @@ from constants import angstrom_to_bohr
 def write_cube(mol,data,file_name):
     """ Writes cubefile with mol and data as passed to it """
     outf=open(file_name+".cub",'w')
-    outf.writelines("CUBE FILE WRITTEN USING MBG CUBEPY CODE VERSION 0.01\n")
+    outf.writelines("CUBE FILE WRITTEN USING MBG'S CUBEUTILS CODE VERSION 0.1\n")
     outf.writelines("YOUR MILEAGE MAY VARY\n")
     outf.writelines(str(mol.natoms)+"\t0.0\t0.0\t0.0\n") # natoms x y z (offset)
     npts=np.array(data.shape,dtype=float)
