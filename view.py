@@ -2,7 +2,7 @@ import numpy as np
 import scipy.special
 import scipy.misc
 from mayavi import mlab
-from constants import *
+from cons import *
 from mayavi.tools.mlab_scene_model import MlabSceneModel
 from traits.api import HasTraits, Range, Instance, on_trait_change,Int,Float,Button
 import itertools
@@ -40,7 +40,7 @@ def plotbonds(scene,mol,offset=[0,1,0,1,0,1]):
     return plts
 
 
-def plotdata(scene,data,dim=np.ones(3),contours=[],offset=[0,1,0,1,0,1],extent=[]):
+def plotdata(scene,data,dim=np.ones(3),constours=[],offset=[0,1,0,1,0,1],extent=[]):
     npts=np.array(data.shape,dtype=int)
     nx,ny,nz=np.complex(1j)*npts
     ix1,ix2=[(offset[0])*dim[0],(offset[1])*dim[0]]
@@ -62,25 +62,25 @@ def plotdata(scene,data,dim=np.ones(3),contours=[],offset=[0,1,0,1,0,1],extent=[
             for irz in range(rz):
                 d2[(irx)*ox:(irx+1)*ox,(iry)*oy:(iry+1)*oy,(irz)*oz:(irz+1)*oz]=data
 
-    if (len(contours)==0):
+    if (len(constours)==0):
         vmax=data.max()*.5
         vmin=data.min()*.5
-        contours=[vmin,vmax]
-    if (len(contours)==2):
+        constours=[vmin,vmax]
+    if (len(constours)==2):
         if (len(extent)==0):
-            plot1=scene.mlab.contour3d(x,y,z,d2.real,contours=[contours[0]],transparent=True,color=(1,0,0),opacity=0.3)
-            plot2=scene.mlab.contour3d(x,y,z,d2.real,contours=[contours[1]],transparent=True,color=(0,0,1),opacity=0.3)
+            plot1=scene.mlab.constour3d(x,y,z,d2.real,constours=[constours[0]],transparent=True,color=(1,0,0),opacity=0.3)
+            plot2=scene.mlab.constour3d(x,y,z,d2.real,constours=[constours[1]],transparent=True,color=(0,0,1),opacity=0.3)
         else:
-            plot1=scene.mlab.contour3d(x,y,z,d2.real,contours=[contours[0]],transparent=True,color=(1,0,0),opacity=0.3,extent=extent)
-            plot2=scene.mlab.contour3d(x,y,z,d2.real,contours=[contours[1]],transparent=True,color=(0,0,1),opacity=0.3,extent=extent)
+            plot1=scene.mlab.constour3d(x,y,z,d2.real,constours=[constours[0]],transparent=True,color=(1,0,0),opacity=0.3,extent=extent)
+            plot2=scene.mlab.constour3d(x,y,z,d2.real,constours=[constours[1]],transparent=True,color=(0,0,1),opacity=0.3,extent=extent)
         return [plot1,plot2]
     
     plots=[]
-    for ictr in contours:
+    for ictr in constours:
         if (len(extent)==0):
-            iplt=scene.mlab.contour3d(x,y,z,d2.real,contours=[ictr],transparent=True,opacity=0.3)
+            iplt=scene.mlab.constour3d(x,y,z,d2.real,constours=[ictr],transparent=True,opacity=0.3)
         else:
-            iplt=scene.mlab.contour3d(x,y,z,d2.real,contours=[ictr],transparent=True,opacity=0.3,extent=extent)
+            iplt=scene.mlab.constour3d(x,y,z,d2.real,constours=[ictr],transparent=True,opacity=0.3,extent=extent)
         plots.append(iplt)
     return plots
 
@@ -131,8 +131,8 @@ def view_data(data):
         @on_trait_change('upiso,downiso',post_init=True)
         def update_plot(self):
             plt1,plt2=self.plots
-            plt1.contour.contours=[self.downiso]
-            plt2.contour.contours=[self.upiso]        
+            plt1.constour.constours=[self.downiso]
+            plt2.constour.constours=[self.upiso]        
         
         @on_trait_change('upx,upy,upz,downx,downy,downz',post_init=True)
         def redo_plots(self):
@@ -154,7 +154,7 @@ def view_data(data):
                HGroup('downiso','upiso,fixpbc'), resizable=True,)
 
     visualization = Visualization()
-    visualization.configure_traits()
+    visualization.consfigure_traits()
 
 
 def view_mol(mol):
@@ -199,7 +199,7 @@ def view_mol(mol):
                HGroup('fixpbc'), resizable=True,)
 
     visualization = Visualization()
-    visualization.configure_traits()
+    visualization.consfigure_traits()
 
 def view_vol(mol,data):
     mi=float(data.min())
@@ -255,7 +255,7 @@ def view_vol(mol,data):
                HGroup('downiso','upiso'), resizable=True,)
 
     visualization = Visualization()
-    visualization.configure_traits()
+    visualization.consfigure_traits()
 
 
     scene = Instance(MlabSceneModel, ())
@@ -297,8 +297,8 @@ def iview(mol,data):
         @on_trait_change('upiso,downiso',post_init=True)
         def update_plot(self):
             plt1,plt2=self.plots
-            plt1.contour.contours=[self.downiso]
-            plt2.contour.contours=[self.upiso]        
+            plt1.constour.constours=[self.downiso]
+            plt2.constour.constours=[self.upiso]        
         
         @on_trait_change('upx,upy,upz,downx,downy,downz',post_init=True)
         def redo_plots(self):
@@ -328,5 +328,5 @@ def iview(mol,data):
                HGroup('downiso','upiso','fixpbc'), resizable=True,)
 
     visualization = Visualization()
-    visualization.configure_traits()
+    visualization.consfigure_traits()
 

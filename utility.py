@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import numpy as np
 from copy import deepcopy
-import constants
+import cubeutils.cons as cons
 
 #import view
 
@@ -24,7 +24,7 @@ class molecule:
         ret_str=str(self.natoms)+"\n"
         ret_str+="\t".join([str(ic) for ic in self.cell.flatten()])+"\n"
         for i in xrange(self.natoms):
-            ret_str+=constants.dict_of_atomic_abbr[self.atomids[i]]+"\t"+"\t".join([str(self.coords[i][j]) for j in range(3)])+"\n"
+            ret_str+=cons.dict_of_atomic_abbr[self.atomids[i]]+"\t"+"\t".join([str(self.coords[i][j]) for j in range(3)])+"\n"
         return ret_str
     def __center_of_mass(self):
         """ This computes the centroid and center of mass using standard atomic masses """
@@ -33,7 +33,7 @@ class molecule:
         if len(self.coords)==0:
             return
         self.centroid=np.sum(self.coords)/len(self.coords)
-        wts=np.array([constants.dict_of_atomic_masses[self.atomids[i]]  for i in range(self.natoms)])
+        wts=np.array([cons.dict_of_atomic_masses[self.atomids[i]]  for i in range(self.natoms)])
         self.com=wts.dot(self.coords)/np.sum(wts)
     def write(self,fl):
         """ Write to xyz """

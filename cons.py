@@ -1,3 +1,5 @@
+import numpy as np
+
 #####################################################################
 #                                                                   #
 #      Constants taken from:  http://physics.nist.gov/constants     #
@@ -7,8 +9,6 @@
 #                            (2/8/2014)                             #
 #                                                                   #
 #####################################################################
-from __future__ import print_function
-import numpy as np
 
 def info():
     print("Selection of constants and conversion factors")
