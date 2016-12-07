@@ -37,7 +37,7 @@ def read_pp(fl):
         A=data[1]*bohr_to_angstrom
         cell=np.array([stream.readline().split() for i in range(3)],dtype=float)
         cell*=A
-    else if data[0]==1:
+    elif data[0]==1:
         A=data[1]*bohr_to_angstrom
         cell=np.identity(3)*A
     stream.readline()
