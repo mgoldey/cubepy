@@ -34,7 +34,7 @@ class molecule:
             return
         self.centroid=np.sum(self.coords)/len(self.coords)
         wts=np.array([cons.dict_of_atomic_masses[self.atomids[i]]  for i in range(self.natoms)])
-        self.com=wts.dot(self.coords)/np.sum(wts)
+        self.com=np.dot(wts,self.coords)/np.sum(wts)
     def write(self,fl):
         """ Write to xyz """
         os=open(fl,'w')
@@ -44,7 +44,9 @@ class molecule:
     def view(self):
         view.view_mol(self)
     def fixpbc(self):
-        self.coords=np.imag(np.log(np.exp(2*np.pi*np.complex(1j)*self.coords.dot(np.linalg.inv(self.cell))))).dot(self.cell)/(2*np.pi)
+        self.coords=np.dot(np.imag(np.log(np.exp(2*np.pi*np.complex(1j)*
+        	np.dot(self.coords,np.linalg.inv(self.cell))))),
+			self.cell)/(2*np.pi)
         self.__center_of_mass()
     def move(self,vec):
         self.coords=self.coords+vec
