@@ -33,11 +33,11 @@ def read_pp(fl):
     nat=data[-2]
     types=np.arange(ntyp)+1
     data=np.array(stream.readline().split(),dtype=float)
-    if data[0]==0:
+    if (int(data[0])==0):
         A=data[1]*bohr_to_angstrom
         cell=np.array([stream.readline().split() for i in range(3)],dtype=float)
         cell*=A
-    elif data[0]==1:
+    elif (int(data[0])==1):
         A=data[1]*bohr_to_angstrom
         cell=np.identity(3)*A
     stream.readline()
