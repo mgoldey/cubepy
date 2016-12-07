@@ -78,7 +78,7 @@ def read_xyz(fl):
 def read(fl):
     if (".cub" in fl):
         return read_cube(fl)
-    if (".pp" in fl):
-        return read_pp(fl)
     if (".xyz" in fl):
         return read_xyz(fl)
+    if ("pp" in fl):  # DANGEROUS DUE TO LACK OF FILE ENDING UNIFORMITY
+        return read_pp(fl)
