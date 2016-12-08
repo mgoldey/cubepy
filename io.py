@@ -58,7 +58,7 @@ def read_pp(fl):
     coords=np.array(coords)
 
     mol=molecule(atomids,coords,cell)
-    data=np.array(stream.read().split(),dtype=float).reshape(np.array(npts,dtype=int)).T
+    data=np.array(stream.read().split(),dtype=float).reshape(np.array(npts,dtype=int).T).T
     return mol,data
 
 def read_xyz(fl):
